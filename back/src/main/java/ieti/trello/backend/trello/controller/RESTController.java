@@ -3,6 +3,7 @@ package ieti.trello.backend.trello.controller;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import ieti.trello.backend.trello.entities.Task;
 import ieti.trello.backend.trello.persistence.ITaskRepository;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -43,27 +45,27 @@ public class RESTController {
     }
 
     @CrossOrigin("*")
+    @Async
     @PostMapping("/files")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
         System.out.println(file.getName()  + " " +  file.getContentType()  );
-        gridFsTemplate.store(file.getInputStream(), file.getOriginalFilename(), file.getContentType());
+        ObjectId objID = gridFsTemplate.store(file.getInputStream(), file.getOriginalFilename(), file.getContentType());
+
         redirectAttributes.addFlashAttribute("message",
                 "You successfully uploaded " + file.getOriginalFilename() + "!");
-        return "redirect:/";
+        return objID.toHexString();
     }
 
     @CrossOrigin("*")
-    @PostMapping("/todo")
-    public Task createTodo(@RequestBody Task todo) {
-        //TODO implement method
-        return null;
+    @PostMapping("/task")
+    public Task createTask(@RequestBody Task todo) {
+        return taskRepository.save(todo);
     }
 
     @CrossOrigin("*")
     @GetMapping("/todo")
-    public List<Task> getTodoList() {
-        //TODO implement method
-        return null;
+    public List<Task> getTaskList() {
+        return taskRepository.findAll();
     }
 
 }

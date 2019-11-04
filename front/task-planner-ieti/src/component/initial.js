@@ -61,7 +61,8 @@ class Index extends React.Component {
             
             text: '', dueDate: moment(), open: false,
             name: '', email: '', status : '',
-            todoList : []
+            todoList : [],
+            objectid : null,
         };
     
         this.axios = axios.create({
@@ -136,19 +137,7 @@ class Index extends React.Component {
         });
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
-      
-        let data = new FormData();
-        data.append('file', this.state.file);
-
-        this.axios.post('/api/files', data)
-            .then(function (response) {
-                console.log("file uploaded!", data);
-        })
-        .catch(function (error) {
-            console.log("failed file upload", error);
-        });
+    postTask(){
         if (!this.state.email.length || !this.state.status.length || !this.state.dueDate || !this.state.name.length) {
             return;
         }
@@ -162,16 +151,40 @@ class Index extends React.Component {
                 }
             ],
             name: this.state.name,
-            id: Date.now()
+            id: Date.now(),
+            file :  this.state.objectid
+            
         };
-        this.axios.post('/task', 
+        console.log(newItem)
+        this.axios.post('/api/task', 
             newItem
         ).then(function (response) {
             swal("Good job!", "You task was saved!", "success");
         }).catch(function (error) {
             console.log(error);
         });
-        window.location.href = "/index";
+        
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+      
+        let data = new FormData();
+        data.append('file', this.state.file);
+        var self = this;
+        
+        this.axios.post('/api/files', data)
+            .then(function (response) {
+                self.state.objectid =  response.data
+                console.log("file uploaded!", response.data);
+                self.postTask();
+        })
+        .catch(function (error) {
+            console.log("failed file upload", error);
+        });
+
+     
+  
     
     }
 
@@ -187,7 +200,7 @@ class Index extends React.Component {
     render() {
         const { classes } = this.props;
         const estados = [
-            { value: "Completed"}, { value: "In Progress" }, { value: "Ready"}
+            { value: "Completed"}, { value: "InProgress" }, { value: "Ready"}
           ]   
         return (
             <div className={classes.index} id="temp">

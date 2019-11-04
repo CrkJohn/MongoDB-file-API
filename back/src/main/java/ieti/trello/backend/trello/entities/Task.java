@@ -1,6 +1,7 @@
 package ieti.trello.backend.trello.entities;
 
 
+import com.mongodb.client.gridfs.model.GridFSFile;
 import ieti.trello.backend.trello.entities.util.Label;
 import ieti.trello.backend.trello.entities.util.State;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.*;
@@ -28,6 +30,7 @@ public class Task{
     private String description;
     private String id;
     private String responsible;
+    private String file;
     private List<Comment> comments  = new ArrayList<>();
     private List<User> members = new ArrayList<>();
 
