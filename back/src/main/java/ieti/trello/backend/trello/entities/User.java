@@ -23,8 +23,6 @@ public class User{
     private String userName;
     private String initials;
     private String password;
-    private List<Dashboard> dashboards = new ArrayList<>();
-    private List<Team> teams = new ArrayList<>();
 
     @Override
     public String toString() {
@@ -35,8 +33,8 @@ public class User{
                 ", userName='" + userName + '\'' +
                 ", initials='" + initials + '\'' +
                 ", password='" + password + '\'' +
-                ", dashboards=" + dashboards +
-                ", teams=" + teams +
+
+
                 '}';
     }
 }

@@ -60,6 +60,7 @@ public class DataBasesCli implements IDataBase {
             user.setName(names[i]);
             user.setEmail(names[i]+"@mail.escuelaing.edu.co");
             user.setUserName(String.valueOf(i+1));
+            task.getMembers().add(user);
             task.setExpirationDate("1997-11-10");
             tasks.add(task);
         }

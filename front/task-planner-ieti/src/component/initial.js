@@ -81,6 +81,7 @@ class Index extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleOpen = this.handleOpen.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
 
 
     }
@@ -137,6 +138,17 @@ class Index extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
+      
+        let data = new FormData();
+        data.append('file', this.state.file);
+
+        this.axios.post('/api/files', data)
+            .then(function (response) {
+                console.log("file uploaded!", data);
+        })
+        .catch(function (error) {
+            console.log("failed file upload", error);
+        });
         if (!this.state.email.length || !this.state.status.length || !this.state.dueDate || !this.state.name.length) {
             return;
         }
@@ -161,6 +173,12 @@ class Index extends React.Component {
         });
         window.location.href = "/index";
     
+    }
+
+    handleInputChange(e) {
+        this.setState({
+            file: e.target.files[0]
+        });
     }
 
     
@@ -253,6 +271,9 @@ class Index extends React.Component {
                                     onChange={this.handleDateChange}>
 
                                 </DatePicker>
+                                <br />
+                                <br />
+                                <input type="file" id="file" onChange={this.handleInputChange}/>
                                 <br />
                                 <br />
 
