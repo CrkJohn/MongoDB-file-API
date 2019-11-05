@@ -21,7 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.util.List;
 
-@RequestMapping("v1/api")
+@RequestMapping(value = "v1/api")
 @RestController
 public class RESTController {
 
@@ -32,6 +32,7 @@ public class RESTController {
     GridFsTemplate gridFsTemplate;
     //TODO inject components (TodoRepository and GridFsTemplate)
 
+    /*
     @RequestMapping("/files/{filename}")
     public ResponseEntity<InputStreamResource> getFileByName(@PathVariable String filename) throws IOException {
         GridFSFile file = gridFsTemplate.findOne(new Query().addCriteria(Criteria.where("filename").is(filename)));
@@ -43,9 +44,21 @@ public class RESTController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+    */
+    @RequestMapping("/files/{_id}")
+    public ResponseEntity<InputStreamResource> getFileById(@PathVariable ObjectId _id) throws IOException {
+        GridFSFile file = gridFsTemplate.findOne(new Query().addCriteria(Criteria.where("_id").is(_id)));
+        if(file != null){
+            GridFsResource resource = gridFsTemplate.getResource(file.getFilename());
+            return ResponseEntity.ok()
+                    .contentType(MediaType.valueOf(resource.getContentType()))
+                    .body(new InputStreamResource(resource.getInputStream()));
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 
-    @CrossOrigin("*")
     @Async
+    @CrossOrigin("*")
     @PostMapping("/files")
     public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
         System.out.println(file.getName()  + " " +  file.getContentType()  );
@@ -63,7 +76,7 @@ public class RESTController {
     }
 
     @CrossOrigin("*")
-    @GetMapping("/todo")
+    @GetMapping("/task")
     public List<Task> getTaskList() {
         return taskRepository.findAll();
     }

@@ -24,6 +24,11 @@ export class Todo extends React.Component {
                 <Typography variant="body2" color="textSecondary" component="p">
                         {" Email resposible " + this.props.email}
                 </Typography>
+                <br />
+
+                <center>
+                {this.props.fileUrl ? <img src={"http://localhost:8080/v1/api/files/"+this.props.fileUrl} /> : <div/>}
+                </center>
 
             </CardContent>
         );

@@ -17,6 +17,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
 import swal from 'sweetalert';
+import SelectInput from '@material-ui/core/Select/SelectInput';
 
 
 
@@ -159,10 +160,19 @@ class Index extends React.Component {
         this.axios.post('/api/task', 
             newItem
         ).then(function (response) {
-            swal("Good job!", "You task was saved!", "success");
+            swal({
+                title: "Good job!",
+                text: "You task was saved!.",
+                type: "success",
+                timer: 4000,
+                closeOnConfirm: false,
+                closeOnCancel: false
+            });
+            window.location.reload();
         }).catch(function (error) {
             console.log(error);
         });
+      
         
     }
 

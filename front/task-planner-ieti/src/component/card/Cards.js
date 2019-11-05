@@ -55,7 +55,7 @@ export class Cards extends React.Component {
 
     async getTaskList() {
         var self = this;
-        this.axios.get('/task')
+        this.axios.get('/api/task')
             .then(function (response) {
                 //console.log(response.data)
                 var data = response.data;
@@ -67,8 +67,9 @@ export class Cards extends React.Component {
                         name: task.members[0].name,
                         email: task.members[0].email,
                         dueDate: task.expirationDate,
-                        status :  task.state,
-                        id: Date.now()
+                        status: task.state,
+                        id: Date.now(),
+                        fileUrl : task.file
                     };
                     tasksList.push(newItem)
                 });
@@ -78,6 +79,8 @@ export class Cards extends React.Component {
             }).catch(function (error) {
                 console.log(error);
             });
+ 
+
     }
 
     componentDidMount() {
@@ -96,7 +99,7 @@ export class Cards extends React.Component {
                 }
                 if (td.email === (this.props.filter.name) ||
                     td.status === (this.props.filter.status) || td.dueDate.split("T")[0] == newDate) {
-                    return (<div key = {uuid.v4()}>
+                    return (<div key={uuid.v4()}>
                         <Card>
                             <CardActionArea>
                                 <Todo email={td.email} status={td.status} text={td.text} priority={td.priority} dueDate={td.dueDate} ></Todo>
@@ -107,10 +110,10 @@ export class Cards extends React.Component {
                 }
 
             } else {
-                return (<div key = {uuid.v4()}>
+                return (<div key={uuid.v4()}>
                     <Card>
                         <CardActionArea>
-                            <Todo email={td.email} status={td.status} text={td.text} priority={td.priority} dueDate={td.dueDate} ></Todo>
+                            <Todo fileUrl={td.fileUrl} email={td.email} status={td.status} text={td.text} priority={td.priority} dueDate={td.dueDate} ></Todo>
                         </CardActionArea>
                     </Card>
                     <br></br>

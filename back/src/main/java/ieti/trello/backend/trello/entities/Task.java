@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -30,7 +31,7 @@ public class Task{
     private String description;
     private String id;
     private String responsible;
-    private String file;
+    private String file = null;
     private List<Comment> comments  = new ArrayList<>();
     private List<User> members = new ArrayList<>();
 
