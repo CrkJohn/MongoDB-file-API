@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Random;
 
 @SpringBootApplication
-public class TrelloApplication implements CommandLineRunner {
+public class TrelloApplication /*implements CommandLineRunner */{
 
 
 
